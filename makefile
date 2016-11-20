@@ -17,7 +17,8 @@ DEPS = $(patsubst %,$(LIBS)%,$(_DEPS))
 
 # Object Files
 _OBJ=\
-	main.o
+	main.o \
+	snake.o
 OBJ = $(patsubst %,$(BUILD)%,$(_OBJ))
 
 MAIN = main
