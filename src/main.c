@@ -4,7 +4,6 @@
 #include "snake.h"
 
 const int DELAY = 100;
-const char WALL = '#';
 const int B_COL = 29;
 const int B_ROW = 29;
 
@@ -23,11 +22,9 @@ int main() {
 
 	struct Snake* p1 = new_snake();
 	
-	int r=1, c=1;
-	int ch = '\0', pch = '\0';
+	int head_r=1, head_c=1;
+	int ch = '\0';
 	do {
-		mvwaddch(board, r, c, ' ');
-
 		switch(ch) {
 		case KEY_DOWN:
 			move_snake(p1, 0, 1);
@@ -43,16 +40,24 @@ int main() {
 			break;
 		}
 
-		if(r+get_y(p1) <= 0 || r+get_y(p1)+1 >= B_ROW ||
-		   c+get_x(p1) <= 0 || c+get_x(p1)+1 >= B_COL) {
+		// Get tile in next position
+		char hit = mvwinch(board,
+						   head_r + get_snake_y(p1),
+						   head_c + get_snake_x(p1));
+		// Stop snake if nowhere to go
+		if(hit != ' ') {
 			move_snake(p1, 0, 0);
 		}
+		// Remove previous place
+		mvwaddch(board, head_r, head_c, ' ');
+		// Update position
+		head_r += get_snake_y(p1);
+		head_c += get_snake_x(p1);
+		// Reprint place
+		mvwaddch(board, head_r, head_c, 'O');
 
-		r += get_y(p1);
-		c += get_x(p1);
-		
-		mvwaddch(board, r, c, 'O');
-		wmove(board, 0, 0);
+		// Tidy Board
+		move(0, 0);
 		wrefresh(board);
 	} while((ch = getch()) != 'q');
 	
