@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ncurses.h>
+#include "snake.h"
 
 const int DELAY = 100;
 const char WALL = '#';
@@ -19,39 +20,36 @@ int main() {
 	WINDOW* board = create_board(B_ROW, B_COL, 0, 0);
 	wattron(board, COLOR_PAIR(1));
 	timeout(DELAY);
+
+	struct Snake* p1 = new_snake();
 	
 	int r=1, c=1;
 	int ch = '\0', pch = '\0';
 	do {
-		if(ch == ERR) {
-			ch = pch;
-		} else {
-			pch = ch;
-		}
 		mvwaddch(board, r, c, ' ');
 
 		switch(ch) {
 		case KEY_DOWN:
-			if(r+2 < B_ROW) {
-				r++;
-			}
+			move_snake(p1, 0, 1);
 			break;
 		case KEY_UP:
-			if(r-1 > 0) {
-				r--;
-			}
+			move_snake(p1, 0, -1);
 			break;
 		case KEY_RIGHT:
-			if(c+2 < B_COL) {
-				c++;
-			}
+			move_snake(p1, 1, 0);
 			break;
 		case KEY_LEFT:
-			if(c-1 > 0) {
-				c--;
-			}
+			move_snake(p1, -1, 0);
 			break;
 		}
+
+		if(r+get_y(p1) <= 0 || r+get_y(p1)+1 >= B_ROW ||
+		   c+get_x(p1) <= 0 || c+get_x(p1)+1 >= B_COL) {
+			move_snake(p1, 0, 0);
+		}
+
+		r += get_y(p1);
+		c += get_x(p1);
 		
 		mvwaddch(board, r, c, 'O');
 		wmove(board, 0, 0);
