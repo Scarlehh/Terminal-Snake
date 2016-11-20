@@ -20,49 +20,44 @@ int main() {
 	wattron(board, COLOR_PAIR(1));
 	timeout(DELAY);
 
-	struct Snake* p1 = new_snake();
-	
-	int head_r=1, head_c=1;
+	struct Snake* p1 = new_snake(board, 1, 1);
 	int ch = '\0';
 	do {
 		switch(ch) {
 		case KEY_DOWN:
-			move_snake(p1, 0, 1);
+			update_snake_dir(p1, 0, 1);
 			break;
 		case KEY_UP:
-			move_snake(p1, 0, -1);
+			update_snake_dir(p1, 0, -1);
 			break;
 		case KEY_RIGHT:
-			move_snake(p1, 1, 0);
+			update_snake_dir(p1, 1, 0);
 			break;
 		case KEY_LEFT:
-			move_snake(p1, -1, 0);
+			update_snake_dir(p1, -1, 0);
+			break;
+		case 'a':
+			grow_snake(board, p1);
 			break;
 		}
-
 		// Get tile in next position
 		char hit = mvwinch(board,
-						   head_r + get_snake_y(p1),
-						   head_c + get_snake_x(p1));
+						   get_snake_next_y(p1),
+						   get_snake_next_x(p1));
 		// Stop snake if nowhere to go
 		if(hit != ' ') {
-			move_snake(p1, 0, 0);
+			update_snake_dir(p1, 0, 0);
 		}
-		// Remove previous place
-		mvwaddch(board, head_r, head_c, ' ');
-		// Update position
-		head_r += get_snake_y(p1);
-		head_c += get_snake_x(p1);
-		// Reprint place
-		mvwaddch(board, head_r, head_c, 'O');
+		move_snake(board, p1);
 
 		// Tidy Board
 		move(0, 0);
 		wrefresh(board);
 	} while((ch = getch()) != 'q');
 	
-	destroy_board(board);	
-	end();	
+	destroy_board(board);
+	end();
+	delete_snake(p1);
 	return 0;
 }
 
