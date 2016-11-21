@@ -103,3 +103,11 @@ int get_snake_next_x(struct Snake* snake) {
 int get_snake_next_y(struct Snake* snake) {
 	return get_y(snake->scales->pos) + get_y(snake->dir);
 }
+
+int get_snake_dir_x(struct Snake* snake) {
+	return get_x(snake->dir);
+}
+
+int get_snake_dir_y(struct Snake* snake) {
+	return get_y(snake->dir);
+}

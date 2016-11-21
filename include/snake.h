@@ -32,5 +32,7 @@ char look_ahead_snake(struct Snake* snake);
 // Getters
 int get_snake_next_x(struct Snake* snake);
 int get_snake_next_y(struct Snake* snake);
+int get_snake_dir_x(struct Snake* snake);
+int get_snake_dir_y(struct Snake* snake);
 
 #endif
