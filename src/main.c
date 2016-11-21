@@ -2,11 +2,14 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include <locale.h>
+#include <time.h>
 #include "snake.h"
+#include "powerup.h"
 
 const int DELAY = 100;
 const int B_COL = 29;
 const int B_ROW = 29;
+const char FRUIT_ICON = '@';
 
 void init();
 void end();
@@ -15,6 +18,7 @@ void destroy_board(WINDOW* local_win);
 
 int main() {
 	setlocale(LC_ALL, "");
+	srand(time(NULL));
 	init();
 	refresh();	
 	
@@ -23,7 +27,12 @@ int main() {
 	timeout(DELAY);
 
 	struct Snake* p1 = new_snake(board, 1, 1);
+	struct Powerup* fruit = new_powerup(board,
+										1 + (rand() % (B_COL-2)),
+										1 + (rand() % (B_ROW-2)),
+										FRUIT_ICON);
 	int ch = '\0';
+	int lost = 0;
 	do {
 		switch(ch) {
 		case KEY_DOWN:
@@ -38,26 +47,36 @@ int main() {
 		case KEY_LEFT:
 			update_snake_dir(p1, -1, 0);
 			break;
-		case 'a':
-			grow_snake(p1);
-			break;
 		}
 		// Get tile in next position
 		char hit = look_ahead_snake(p1);
 		// Stop snake if nowhere to go
 		if(hit != ' ') {
-			update_snake_dir(p1, 0, 0);
+			if(hit == FRUIT_ICON) {
+				grow_snake(p1);
+				relocate_powerup(fruit,
+								 1 + (rand() % (B_COL-2)),
+								 1 + (rand() % (B_ROW-2)));
+			} else {
+				if(get_snake_dir_x(p1) != 0 ||
+				   get_snake_dir_y(p1) != 0) {
+					lost = 1;
+					update_snake_dir(p1, 0, 0);
+				}
+			}
 		}
 		move_snake(p1);
 
 		// Tidy Board
 		move(0, 0);
 		wrefresh(board);
-	} while((ch = getch()) != 'q');
-	
+	} while((ch = getch()) != 'q' && !lost);
+
+	delete_powerup(fruit);
+	delete_snake(p1);
 	destroy_board(board);
 	end();
-	delete_snake(p1);
+
 	return 0;
 }
 
@@ -80,7 +99,7 @@ WINDOW *create_board(int height, int width, int starty, int startx) {
 
 	local_win = newwin(height, width, starty, startx);
 	box(local_win, 0, 0);
-	wrefresh(local_win);		/* Show that box 		*/
+	wrefresh(local_win);
 
 	return local_win;
 }
