@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ncurses.h>
+#include <locale.h>
 #include "snake.h"
 
 const int DELAY = 100;
@@ -13,6 +14,7 @@ WINDOW *create_board(int height, int width, int starty, int startx);
 void destroy_board(WINDOW* local_win);
 
 int main() {
+	setlocale(LC_ALL, "");
 	init();
 	refresh();	
 	
@@ -37,18 +39,16 @@ int main() {
 			update_snake_dir(p1, -1, 0);
 			break;
 		case 'a':
-			grow_snake(board, p1);
+			grow_snake(p1);
 			break;
 		}
 		// Get tile in next position
-		char hit = mvwinch(board,
-						   get_snake_next_y(p1),
-						   get_snake_next_x(p1));
+		char hit = look_ahead_snake(p1);
 		// Stop snake if nowhere to go
 		if(hit != ' ') {
 			update_snake_dir(p1, 0, 0);
 		}
-		move_snake(board, p1);
+		move_snake(p1);
 
 		// Tidy Board
 		move(0, 0);
