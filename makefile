@@ -19,7 +19,8 @@ DEPS = $(patsubst %,$(LIBS)%,$(_DEPS))
 _OBJ=\
 	main.o \
 	snake.o \
-	coord.o
+	coord.o \
+	powerup.o
 OBJ = $(patsubst %,$(BUILD)%,$(_OBJ))
 
 MAIN = main
