@@ -3,40 +3,31 @@
 
 #include <ncurses.h>
 
-struct Coord {
-	int x, y;
-};
-
-struct Node {
-	struct Node* next;
+struct Scale {
+	struct Scale* next;
 	struct Coord* pos;
 };
 
 struct Snake {
 	struct Coord* dir;
-	struct Node* ll;
+	struct Scale* scales;
+	WINDOW* board;
 };
 
-// Coord
-struct Coord* new_coord();
-void delete_coord(struct Coord* coord);
-void set_coord(struct Coord* coord, int x, int y);
-int get_x(struct Coord* coord);
-int get_y(struct Coord* coord);
-
 // Linked List
-struct Node* new_ll(WINDOW* board, int x, int y);
-void delete_ll(struct Node* ll);
-void add_node(WINDOW* board, struct Node* ll, int x, int y);
-void update_head(WINDOW* board, struct Node* ll, int x, int y);
+struct Scale* new_scale(WINDOW* board, int x, int y);
+void delete_scale(struct Scale* scale);
+void add_scale(WINDOW* board, struct Scale* scale, int x, int y);
+void update_head(WINDOW* board, struct Scale* scale, int x, int y);
 
 // Snake
 struct Snake* new_snake(WINDOW* board, int x, int y);
 void delete_snake(struct Snake* snake);
 void update_snake_dir(struct Snake* snake, int dirx, int diry);
-void move_snake(WINDOW* board, struct Snake* snake);
+void move_snake(struct Snake* snake);
 void update_snake_length(struct Snake* snake);
-void grow_snake(WINDOW* board, struct Snake* snake);
+void grow_snake(struct Snake* snake);
+char look_ahead_snake(struct Snake* snake);
 
 // Getters
 int get_snake_next_x(struct Snake* snake);
