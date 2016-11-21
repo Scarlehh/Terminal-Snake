@@ -1,6 +1,6 @@
 # Compiler
 CC=gcc
-CFLAGS=-lncurses -I $(LIBS)
+CFLAGS=-lncursesw -I $(LIBS)
 
 MKBIN = mkdir $(BIN)
 MKBUILD = mkdir $(BUILD)
@@ -18,7 +18,8 @@ DEPS = $(patsubst %,$(LIBS)%,$(_DEPS))
 # Object Files
 _OBJ=\
 	main.o \
-	snake.o
+	snake.o \
+	coord.o
 OBJ = $(patsubst %,$(BUILD)%,$(_OBJ))
 
 MAIN = main
