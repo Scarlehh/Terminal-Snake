@@ -2,8 +2,8 @@
 CC=gcc
 CFLAGS=-lncursesw -I $(LIBS)
 
-MKBIN = mkdir $(BIN)
-MKBUILD = mkdir $(BUILD)
+MKBIN = mkdir -p $(BIN)
+MKBUILD = mkdir -p $(BUILD)
 
 # Directory Structure
 BIN = bin/
@@ -35,9 +35,7 @@ run:
 	./$(BIN)$(MAIN)
 
 mkdir:
-	$(RM) -r $(BIN)
 	$(MKBIN)
-	$(RM) -r $(BUILD)
 	$(MKBUILD)
 
 clean:
