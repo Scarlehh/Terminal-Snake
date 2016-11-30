@@ -20,8 +20,8 @@ int main() {
 	setlocale(LC_ALL, "");
 	srand(time(NULL));
 	init();
-	refresh();	
-	
+	refresh();
+
 	WINDOW* board = create_board(B_ROW, B_COL, 0, 0);
 	wattron(board, COLOR_PAIR(1));
 	timeout(DELAY);
@@ -86,7 +86,7 @@ void init() {
 	noecho(); // Don't echo characters
 	keypad(stdscr, TRUE); // Enable keypad function/arrow keys
 	start_color();
-	
+
 	init_pair(1, COLOR_RED, COLOR_BLACK);
 }
 
@@ -105,7 +105,7 @@ WINDOW *create_board(int height, int width, int starty, int startx) {
 }
 
 
-void destroy_board(WINDOW *local_win) {	
+void destroy_board(WINDOW *local_win) {
 	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
 	wrefresh(local_win);
 	delwin(local_win);

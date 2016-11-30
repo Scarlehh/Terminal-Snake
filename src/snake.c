@@ -11,7 +11,7 @@ struct Scale* new_scale(WINDOW* board, int x, int y) {
 	struct Scale* scale = malloc(sizeof(struct Scale));
 	scale->pos = new_coord(x, y);
 	scale->next = NULL;
-	
+
 	//mvwaddch(board, y, x, SEG);
 	mvwprintw(board, y, x, "%lc", SEG);
 	return scale;
@@ -49,7 +49,7 @@ void update_head(WINDOW* board, struct Scale* scale, int x, int y) {
 	mvwaddch(board, ty, tx, ' ');
 	//mvwaddch(board, y, x, SEG);
 	mvwprintw(board, y, x, "%lc", SEG);
-	
+
 	if(scale->next != NULL) {
 		update_head(board, scale->next, tx, ty);
 	}

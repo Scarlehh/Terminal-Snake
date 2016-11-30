@@ -7,7 +7,7 @@ struct Powerup* new_powerup(WINDOW* board, int x, int y, char icon) {
 	powerup->pos = new_coord(x, y);
 	powerup->board = board;
 	powerup->icon = icon;
-	
+
 	mvwaddch(board, y, x, icon);
 	return powerup;
 }
